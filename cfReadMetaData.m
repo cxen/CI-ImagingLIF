@@ -95,7 +95,7 @@ function [result, serror, iminfo] = cfReadMetaData(lifinfo, tile)
                     %Convert to date and time
                     ts=split(xmlInfo.Text,' ');
                     ts=ts(1:end-1);
-                    tsd=datetime(datestr(now()),'TimeZone','Europe/Zurich');
+                    tsd=datetime('now','TimeZone','Europe/Zurich');
                     parfor t=1:numel(ts)
                         tsd(t)=datetime(uint64(str2double(['0x' ts{t}])),'ConvertFrom','ntfs','TimeZone','Europe/Zurich');
                     end
@@ -158,7 +158,7 @@ function [result, serror, iminfo] = cfReadMetaData(lifinfo, tile)
         if isfield(lifinfo.Image,'Attachment')
             xmlInfo = lifinfo.Image.Attachment;
             for k = 1:numel(xmlInfo)
-                if numel(xmlInfo)==1
+                if isscalar(xmlInfo)
                     xli=xmlInfo;
                 else
                     xli=xmlInfo{k}; 
@@ -223,12 +223,12 @@ function [result, serror, iminfo] = cfReadMetaData(lifinfo, tile)
             %Channel Excitation and Emission
             thisInfo = xli.ATLCameraSettingDefinition.WideFieldChannelConfigurator;
             for k = 1:numel(thisInfo.WideFieldChannelInfo)
-                if numel(thisInfo.WideFieldChannelInfo)==1
+                if isscalar(thisInfo.WideFieldChannelInfo)
                     FluoCubeName=thisInfo.WideFieldChannelInfo.Attributes.FluoCubeName;            
                 else
                     FluoCubeName=thisInfo.WideFieldChannelInfo{k}.Attributes.FluoCubeName;            
                 end
-                if numel(thisInfo.WideFieldChannelInfo)==1
+                if isscalar(thisInfo.WideFieldChannelInfo)
                     if strcmpi(FluoCubeName,'QUAD-S')
                         ExName=thisInfo.WideFieldChannelInfo.Attributes.FFW_Excitation1FilterName;
                         iminfo.filterblock(k)=[FluoCubeName ': ' ExName];

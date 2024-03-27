@@ -825,7 +825,7 @@ if ischar(command)
 
         case 'getsupportedcolormaps'
             % we are asked about supported colormaps
-            map = { MatLabColorMapNames{:} CmapsData{:,1} AutoGenCMapsExamples{:} }';
+            map = [ MatLabColorMapNames(:)' {CmapsData{:,1}} AutoGenCMapsExamples(:)' ]';
             return;
 
         case 'showsupportedcolormaps'
@@ -1179,7 +1179,7 @@ end
 % This function converts string of characters into valid colormap data
 %============================================================================
 function res = String2CMapData(s,varargin)
-HaveSpaces  = ~isempty(strfind(s,' '));
+HaveSpaces  = contains(s,' ');
 if HaveSpaces
 
     cGroups     = {};
